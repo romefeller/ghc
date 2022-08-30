@@ -574,6 +574,7 @@ are the most common patterns, rewritten as regular expressions for clarity:
  'class'        { L _ ITclass }
  'data'         { L _ ITdata }
  'default'      { L _ ITdefault }
+ 'defsu'        { L _ ITdefsu }
  'deriving'     { L _ ITderiving }
  'else'         { L _ ITelse }
  'hiding'       { L _ IThiding }
@@ -2892,6 +2893,7 @@ aexp1   :: { ECP }
 aexp2   :: { ECP }
         : qvar                          { ECP $ mkHsVarPV $! $1 }
         | qcon                          { ECP $ mkHsVarPV $! $1 }
+        | 'defsu'                       { error "lol???"   }
         -- See Note [%shift: aexp2 -> ipvar]
         | ipvar %shift                  {% acsExpr (\cs -> sL1a $1 (HsIPVar (comment (glRR $1) cs) $! unLoc $1)) }
         | overloaded_label              {% acsExpr (\cs -> sL1a $1 (HsOverLabel (comment (glRR $1) cs) $! unLoc $1)) }

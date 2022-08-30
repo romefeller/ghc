@@ -210,6 +210,7 @@ data EpAnnUnboundVar = EpAnnUnboundVar
      } deriving Data
 
 type instance XVar           (GhcPass _) = NoExtField
+type instance XDefsuE        (GhcPass _) = NoExtField
 
 -- Record selectors at parse time are HsVar; they convert to HsRecSel
 -- on renaming.
@@ -487,6 +488,7 @@ ppr_lexpr e = ppr_expr (unLoc e)
 ppr_expr :: forall p. (OutputableBndrId p)
          => HsExpr (GhcPass p) -> SDoc
 ppr_expr (HsVar _ (L _ v))   = pprPrefixOcc v
+ppr_expr (HsDefsu _ )        = text "defsu"
 ppr_expr (HsUnboundVar _ uv) = pprPrefixOcc uv
 ppr_expr (HsRecSel _ f)      = pprPrefixOcc f
 ppr_expr (HsIPVar _ v)       = ppr v
@@ -770,6 +772,7 @@ hsExprNeedsParens prec = go
     go :: HsExpr (GhcPass p) -> Bool
     go (HsVar{})                      = False
     go (HsUnboundVar{})               = False
+    go (HsDefsu{})                    = False
     go (HsIPVar{})                    = False
     go (HsOverLabel{})                = False
     go (HsLit _ l)                    = hsLitNeedsParens prec l

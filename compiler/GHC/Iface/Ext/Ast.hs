@@ -1095,6 +1095,7 @@ instance HiePass p => ToHie (LocatedA (HsExpr (GhcPass p))) where
         [ toHie $ RFC RecFieldOcc Nothing (L (l2l mspan:: SrcAnn NoEpAnns) fld)
         ]
       HsOverLabel {} -> []
+      HsDefsu _ -> []
       HsIPVar _ _ -> []
       HsOverLit _ _ -> []
       HsLit _ _ -> []

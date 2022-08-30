@@ -266,7 +266,7 @@ data HsExpr p
                              --   erroring expression will be written after
                              --   solving. See Note [Holes] in GHC.Tc.Types.Constraint.
 
-
+  | HsDefsu   (XDefsuE p)
   | HsRecSel  (XRecSel p)
               (FieldOcc p) -- ^ Variable pointing to record selector
                            -- See Note [Non-overloaded record field selectors] and

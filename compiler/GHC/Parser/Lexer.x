@@ -716,6 +716,7 @@ data Token
   | ITclass
   | ITdata
   | ITdefault
+  | ITdefsu
   | ITderiving
   | ITdo (Maybe FastString)
   | ITelse
@@ -974,6 +975,7 @@ reservedWordsFM = listToUFM $
          ( "class",          ITclass,         0 ),
          ( "data",           ITdata,          0 ),
          ( "default",        ITdefault,       0 ),
+         ( "defsu",          ITdefsu,         0 ),
          ( "deriving",       ITderiving,      0 ),
          ( "do",             ITdo Nothing,    0 ),
          ( "else",           ITelse,          0 ),
