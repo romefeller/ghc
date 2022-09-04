@@ -2893,7 +2893,7 @@ aexp1   :: { ECP }
 aexp2   :: { ECP }
         : qvar                          { ECP $ mkHsVarPV $! $1 }
         | qcon                          { ECP $ mkHsVarPV $! $1 }
-        | 'defsu'                       { error "lol???"   }
+        | 'defsu'                       { ecpFromExp $ sL1 $1 (HsDefsu NoExtField)   }
         -- See Note [%shift: aexp2 -> ipvar]
         | ipvar %shift                  {% acsExpr (\cs -> sL1a $1 (HsIPVar (comment (glRR $1) cs) $! unLoc $1)) }
         | overloaded_label              {% acsExpr (\cs -> sL1a $1 (HsOverLabel (comment (glRR $1) cs) $! unLoc $1)) }
