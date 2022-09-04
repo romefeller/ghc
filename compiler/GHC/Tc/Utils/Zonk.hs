@@ -899,6 +899,8 @@ zonkExpr env (XExpr (ConLikeTc con tvs tys))
     -- The tvs come straight from the data-con, and so are strictly redundant
     -- See Wrinkles of Note [Typechecking data constructors] in GHC.Tc.Gen.Head
 
+zonkExpr _ e@(HsDefsu _) = return e
+
 zonkExpr _ expr = pprPanic "zonkExpr" (ppr expr)
 
 -------------------------------------------------------------------------

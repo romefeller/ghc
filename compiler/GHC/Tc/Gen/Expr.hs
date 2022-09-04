@@ -208,7 +208,15 @@ tcExpr e@(HsAppType {})          res_ty = tcApp e res_ty
 tcExpr e@(ExprWithTySig {})      res_ty = tcApp e res_ty
 tcExpr e@(HsRecSel {})           res_ty = tcApp e res_ty
 tcExpr e@(XExpr (HsExpanded {})) res_ty = tcApp e res_ty
-
+tcExpr e@(HsDefsu _)           res_ty
+  = do { res_ty' <- expTypeToType res_ty
+       ; case tyConAppTyCon_maybe res_ty' of
+           Just tc
+             | Just dcs <- tyConDataCons_maybe tc
+             , dc : _ <- filter (null . dataConOrigArgTys) dcs
+             -> tcWrapResult e (HsDefsu dc) (dataConRepType dc) res_ty
+           _ -> failWithTc (TcRnUnknownMessage $ mkPlainError noHints $ hang (text "Defsu error") 2 (text "defsu failed"))
+ }
 tcExpr e@(HsOverLit _ lit) res_ty
   = do { mb_res <- tcShortCutLit lit res_ty
          -- See Note [Short cut for overloaded literals] in GHC.Tc.Utils.Zonk
