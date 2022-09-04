@@ -54,6 +54,7 @@ import GHC.Types.SourceText
 import GHC.Types.SrcLoc
 import GHC.Types.Tickish (CoreTickish)
 import GHC.Core.ConLike
+import GHC.Core.DataCon ( DataCon )
 import GHC.Unit.Module (ModuleName)
 import GHC.Utils.Misc
 import GHC.Utils.Outputable
@@ -210,7 +211,9 @@ data EpAnnUnboundVar = EpAnnUnboundVar
      } deriving Data
 
 type instance XVar           (GhcPass _) = NoExtField
-type instance XDefsuE        (GhcPass _) = NoExtField
+type instance XDefsuE        GhcPs = NoExtField
+type instance XDefsuE        GhcRn = NoExtField
+type instance XDefsuE        GhcTc = DataCon
 
 -- Record selectors at parse time are HsVar; they convert to HsRecSel
 -- on renaming.
@@ -227,7 +230,7 @@ type instance XOverLabel     GhcRn = EpAnnCO
 type instance XOverLabel     GhcTc = DataConCantHappen
 
 -- ---------------------------------------------------------------------
-
+--
 type instance XVar           (GhcPass _) = NoExtField
 
 type instance XUnboundVar    GhcPs = EpAnn EpAnnUnboundVar
@@ -488,7 +491,7 @@ ppr_lexpr e = ppr_expr (unLoc e)
 ppr_expr :: forall p. (OutputableBndrId p)
          => HsExpr (GhcPass p) -> SDoc
 ppr_expr (HsVar _ (L _ v))   = pprPrefixOcc v
-ppr_expr (HsDefsu _ )        = text "defsu"
+ppr_expr (HsDefsu _ )        = text "defsu" -- dd
 ppr_expr (HsUnboundVar _ uv) = pprPrefixOcc uv
 ppr_expr (HsRecSel _ f)      = pprPrefixOcc f
 ppr_expr (HsIPVar _ v)       = ppr v

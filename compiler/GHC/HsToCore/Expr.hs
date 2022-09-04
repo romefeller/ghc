@@ -245,7 +245,7 @@ dsExpr (HsUnboundVar (HER ref _ _) _)  = dsEvTerm =<< readMutVar ref
 
 dsExpr (HsPar _ _ e _)        = dsLExpr e
 dsExpr (ExprWithTySig _ e _)  = dsLExpr e
-
+dsExpr (HsDefsu con)          = dsHsVar (dataConWrapId con)
 dsExpr (HsIPVar x _)          = dataConCantHappen x
 
 dsExpr (HsGetField x _ _)     = dataConCantHappen x

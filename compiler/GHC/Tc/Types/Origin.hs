@@ -593,7 +593,7 @@ data CtOrigin
   | Shouldn'tHappenOrigin String
                             -- the user should never see this one
   | GhcBug20076             -- see #20076
-
+  | DefsuOrigin
   -- | Testing whether the constraint associated with an instance declaration
   -- in a signature file is satisfied upon instantiation.
   --
@@ -675,6 +675,7 @@ lexprCtOrigin (L _ e) = exprCtOrigin e
 
 exprCtOrigin :: HsExpr GhcRn -> CtOrigin
 exprCtOrigin (HsVar _ (L _ name)) = OccurrenceOf name
+exprCtOrigin (HsDefsu _)          = DefsuOrigin
 exprCtOrigin (HsGetField _ _ (L _ f)) = HasFieldOrigin (field_label $ unLoc $ dfoLabel f)
 exprCtOrigin (HsUnboundVar {})    = Shouldn'tHappenOrigin "unbound variable"
 exprCtOrigin (HsRecSel _ f)       = OccurrenceOfRecSel (unLoc $ foLabel f)
@@ -877,6 +878,7 @@ pprCtO (ExprHoleOrigin (Just occ)) = text "a use of" <+> quotes (ppr occ)
 pprCtO (TypeHoleOrigin occ)  = text "a use of wildcard" <+> quotes (ppr occ)
 pprCtO PatCheckOrigin        = text "a pattern-match completeness check"
 pprCtO ListOrigin            = text "an overloaded list"
+pprCtO DefsuOrigin           = text "from defsuuuu"
 pprCtO IfThenElseOrigin      = text "an if-then-else expression"
 pprCtO StaticOrigin          = text "a static form"
 pprCtO NonLinearPatternOrigin = text "a non-linear pattern"

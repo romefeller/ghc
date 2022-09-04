@@ -478,6 +478,7 @@ addTickHsExpr e@(HsRecSel _ (FieldOcc id _))   = do freeVar id; return e
 addTickHsExpr e@(HsIPVar {})            = return e
 addTickHsExpr e@(HsOverLit {})          = return e
 addTickHsExpr e@(HsOverLabel{})         = return e
+addTickHsExpr e@(HsDefsu _)             = return e
 addTickHsExpr e@(HsLit {})              = return e
 addTickHsExpr (HsLam x mg)              = liftM (HsLam x)
                                                 (addTickMatchGroup True mg)
