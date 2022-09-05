@@ -303,6 +303,8 @@ rnExpr (HsLit x lit)
   = do { rnLit lit
        ; return (HsLit x(convertLit lit), emptyFVs) }
 
+rnExpr (HsDefsu _) = return (HsDefsu NoExtField, emptyFVs)
+
 rnExpr (HsOverLit x lit)
   = do { ((lit', mb_neg), fvs) <- rnOverLit lit -- See Note [Negative zero]
        ; case mb_neg of
