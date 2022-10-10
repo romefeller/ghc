@@ -884,6 +884,7 @@ data Token
 
   -- Arrow notation extension
   | ITproc
+  | ITmproc
   | ITrec
   | IToparenbar  IsUnicodeSyntax -- ^ @(|@
   | ITcparenbar  IsUnicodeSyntax -- ^ @|)@
@@ -1028,7 +1029,8 @@ reservedWordsFM = listToUFM $
 
          ( "rec",            ITrec,           xbit ArrowsBit .|.
                                               xbit RecursiveDoBit),
-         ( "proc",           ITproc,          xbit ArrowsBit)
+         ( "proc",           ITproc,          xbit ArrowsBit),
+         ( "mproc",          ITmproc,         0)
      ]
 
 {-----------------------------------
