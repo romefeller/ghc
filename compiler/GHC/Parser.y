@@ -610,6 +610,7 @@ are the most common patterns, rewritten as regular expressions for clarity:
  'prim'         { L _ ITprimcallconv }
  'javascript'   { L _ ITjavascriptcallconv }
  'proc'         { L _ ITproc }          -- for arrow notation extension
+ 'mproc'        { L _ ITmproc }
  'rec'          { L _ ITrec }           -- for arrow notation extension
  'group'    { L _ ITgroup }     -- for list transform extension
  'by'       { L _ ITby }        -- for list transform extension
@@ -2873,6 +2874,7 @@ aexp    :: { ECP }
                            runPV (unECP $4) >>= \ $4@cmd ->
                            fmap ecpFromExp $
                            acsA (\cs -> sLLlA $1 $> $ HsProc (EpAnn (glR $1) [mj AnnProc $1,mu AnnRarrow $3] cs) p (sLLa $1 (reLoc $>) $ HsCmdTop noExtField cmd)) }
+        | 'mproc' apats '->' exp { error $ " " ++ (show $1) }
 
         | aexp1                 { $1 }
 
