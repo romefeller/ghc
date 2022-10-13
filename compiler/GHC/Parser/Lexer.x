@@ -885,6 +885,7 @@ data Token
   -- Arrow notation extension
   | ITproc
   | ITmproc
+  | ITmprocapp   IsUnicodeSyntax -- ^ @<<<@
   | ITrec
   | IToparenbar  IsUnicodeSyntax -- ^ @(|@
   | ITcparenbar  IsUnicodeSyntax -- ^ @|)@

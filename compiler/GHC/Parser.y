@@ -668,6 +668,7 @@ are the most common patterns, rewritten as regular expressions for clarity:
  '>-'           { L _ (ITrarrowtail _) }            -- for arrow notation
  '-<<'          { L _ (ITLarrowtail _) }            -- for arrow notation
  '>>-'          { L _ (ITRarrowtail _) }            -- for arrow notation
+ '<<<'          { L _ (ITmprocapp _) }            -- for mp notation
  '.'            { L _ ITdot }
  PREFIX_PROJ    { L _ (ITproj True) }               -- RecordDotSyntax
  TIGHT_INFIX_PROJ { L _ (ITproj False) }            -- RecordDotSyntax
@@ -2651,6 +2652,15 @@ quasiquote :: { Located (HsUntypedSplice GhcPs) }
                                 ; quoterId = mkQual varName (qual, quoter) }
                             in sL1 $1 (HsQuasiQuote noExtField quoterId (L (noAnnSrcSpan (mkSrcSpanPs quoteSpan)) quote)) }
 
+expmp :: { ECP }
+        : infixexp '<<<' expmp  {% runPV (unECP $1) >>= \ $1 ->
+                                   runPV (unECP $3) >>= \ $3 ->
+                                   fmap ecpFromCmd $
+                                   acsA (\cs -> sLLAA $1 $> $ HsCmdArrApp (EpAnn (glAR $1) (mu Annlarrowtail $2) cs) $1 $3
+                                                        HsFirstOrderApp True) }
+        | infixexp %shift       { $1 }
+        | exp_prag(exp)         { $1 } -- See Note [Pragmas and operator fixity]
+
 exp   :: { ECP }
         : infixexp '::' ctype
                                 { ECP $
@@ -2874,7 +2884,7 @@ aexp    :: { ECP }
                            runPV (unECP $4) >>= \ $4@cmd ->
                            fmap ecpFromExp $
                            acsA (\cs -> sLLlA $1 $> $ HsProc (EpAnn (glR $1) [mj AnnProc $1,mu AnnRarrow $3] cs) p (sLLa $1 (reLoc $>) $ HsCmdTop noExtField cmd)) }
-        | 'mproc' apats '->' exp { error $ " " ++ (show $1) }
+        | 'mproc' apats '->' expmp { error $ show $3 }
 
         | aexp1                 { $1 }
 
@@ -3969,6 +3979,7 @@ isUnicode :: Located Token -> Bool
 isUnicode (L _ (ITforall         iu)) = iu == UnicodeSyntax
 isUnicode (L _ (ITdarrow         iu)) = iu == UnicodeSyntax
 isUnicode (L _ (ITdcolon         iu)) = iu == UnicodeSyntax
+isUnicode (L _ (ITmprocapp       iu)) = iu == UnicodeSyntax
 isUnicode (L _ (ITlarrow         iu)) = iu == UnicodeSyntax
 isUnicode (L _ (ITrarrow         iu)) = iu == UnicodeSyntax
 isUnicode (L _ (ITlarrowtail     iu)) = iu == UnicodeSyntax
