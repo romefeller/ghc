@@ -2884,7 +2884,9 @@ aexp    :: { ECP }
                            runPV (unECP $4) >>= \ $4@cmd ->
                            fmap ecpFromExp $
                            acsA (\cs -> sLLlA $1 $> $ HsProc (EpAnn (glR $1) [mj AnnProc $1,mu AnnRarrow $3] cs) p (sLLa $1 (reLoc $>) $ HsCmdTop noExtField cmd)) }
-        | 'mproc' apats '->' expmp { error $ show $3 }
+        | 'mproc' apats '->' expmp {% runPV (unECP $4) >>= \ ($4@cmd :: LocatedA (HsMPCmd GhcPs)) ->
+                                         fmap ecpFromExp $ acsA (\cs -> sLLlA $1 $> $ HsMProc $2 (_k cmd))
+                                  }
 
         | aexp1                 { $1 }
 

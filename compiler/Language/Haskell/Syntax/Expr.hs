@@ -539,7 +539,8 @@ data HsExpr p
   -- For details on above see Note [exact print annotations] in GHC.Parser.Annotation
   | HsTypedSplice    (XTypedSplice p)   (LHsExpr p) -- `$$z` or `$$(f 4)`
   | HsUntypedSplice  (XUntypedSplice p) (HsUntypedSplice p)
-
+  | HsMProc     [LPat p]
+                (HsMPCmd p)
   -----------------------------------------------------------
   -- Arrow notation extension
 
@@ -790,6 +791,11 @@ We re-use HsExpr to represent these.
 
 -- | Located Haskell Command (for arrow syntax)
 type LHsCmd id = XRec id (HsCmd id)
+
+data HsMPCmd p
+  = HsMpApp (XMpApp  p)
+            (LHsExpr p)
+            (LHsExpr p)
 
 -- | Haskell Command (e.g. a "statement" in an Arrow proc block)
 data HsCmd id

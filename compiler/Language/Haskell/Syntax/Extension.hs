@@ -541,6 +541,9 @@ type family XCmdDo       x
 type family XCmdWrap     x
 type family XXCmd        x
 
+-- MProc type families
+type family XMpApp       x
+
 -- -------------------------------------
 -- ParStmtBlock type families
 type family XParStmtBlock  x x'

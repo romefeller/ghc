@@ -229,6 +229,8 @@ type instance XOverLabel     GhcTc = DataConCantHappen
 
 type instance XVar           (GhcPass _) = NoExtField
 
+type instance XMpApp         _     = NoExtField
+
 type instance XUnboundVar    GhcPs = EpAnn EpAnnUnboundVar
 type instance XUnboundVar    GhcRn = NoExtField
 type instance XUnboundVar    GhcTc = HoleExprRef

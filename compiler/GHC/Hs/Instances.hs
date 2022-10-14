@@ -311,6 +311,11 @@ deriving instance Data (HsCmd GhcPs)
 deriving instance Data (HsCmd GhcRn)
 deriving instance Data (HsCmd GhcTc)
 
+-- deriving instance (DataIdLR p p) => Data (HsCmd p)
+deriving instance Data (HsMPCmd GhcPs)
+deriving instance Data (HsMPCmd GhcRn)
+deriving instance Data (HsMPCmd GhcTc)
+
 -- deriving instance (DataIdLR p p) => Data (HsCmdTop p)
 deriving instance Data (HsCmdTop GhcPs)
 deriving instance Data (HsCmdTop GhcRn)
