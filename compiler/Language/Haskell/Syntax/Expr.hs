@@ -539,8 +539,6 @@ data HsExpr p
   -- For details on above see Note [exact print annotations] in GHC.Parser.Annotation
   | HsTypedSplice    (XTypedSplice p)   (LHsExpr p) -- `$$z` or `$$(f 4)`
   | HsUntypedSplice  (XUntypedSplice p) (HsUntypedSplice p)
-  | HsMProc     [LPat p]
-                (HsMPCmd p)
   -----------------------------------------------------------
   -- Arrow notation extension
 
@@ -552,6 +550,10 @@ data HsExpr p
   -- For details on above see Note [exact print annotations] in GHC.Parser.Annotation
   | HsProc      (XProc p)
                 (LPat p)               -- arrow abstraction, proc
+                (LHsCmdTop p)          -- body of the abstraction
+                                       -- always has an empty stack
+  | HsMProc     (XProc p)
+                [(LPat p)]             -- arrow abstraction, mproc
                 (LHsCmdTop p)          -- body of the abstraction
                                        -- always has an empty stack
 
@@ -817,6 +819,10 @@ data HsCmd id
   --         'GHC.Parser.Annotation.AnnCloseB' @'|)'@
 
   -- For details on above see Note [exact print annotations] in GHC.Parser.Annotation
+  | HsCmdMPApp
+        (XCmdArrApp id)
+        (LHsExpr id)
+        (LHsExpr id)
   | HsCmdArrForm         -- Command formation,  (| e cmd1 .. cmdn |)
         (XCmdArrForm id)
         (LHsExpr id)     -- The operator.

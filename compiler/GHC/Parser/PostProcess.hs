@@ -1714,6 +1714,7 @@ instance DisambECP (HsCmd GhcPs) where
   mkSumOrTuplePV l boxity a _ = cmdFail (locA l) (pprSumOrTuple boxity a)
   rejectPragmaPV _ = return ()
 
+
 cmdFail :: SrcSpan -> SDoc -> PV a
 cmdFail loc e = addFatalError $ mkPlainErrorMsgEnvelope loc $ PsErrParseErrorInCmd e
 
