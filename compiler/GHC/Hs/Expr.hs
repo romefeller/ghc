@@ -670,6 +670,9 @@ ppr_expr (HsUntypedBracket b q)
 ppr_expr (HsProc _ pat (L _ (HsCmdTop _ cmd)))
   = hsep [text "proc", ppr pat, text "->", ppr cmd]
 
+ppr_expr (HsMProc _ pats (L _ (HsCmdTop _ cmd)))
+  = hsep [text "mproc", ppr pats, text "->", ppr cmd]
+
 ppr_expr (HsStatic _ e)
   = hsep [text "static", ppr e]
 
@@ -809,6 +812,7 @@ hsExprNeedsParens prec = go
     go (HsTypedBracket{})             = False
     go (HsUntypedBracket{})           = False
     go (HsProc{})                     = prec > topPrec
+    go (HsMProc{})                    = prec > topPrec
     go (HsStatic{})                   = prec >= appPrec
     go (RecordCon{})                  = False
     go (HsRecSel{})                   = False
@@ -1238,6 +1242,8 @@ ppr_cmd (HsCmdArrApp _ arrow arg HsHigherOrderApp True)
   = hsep [ppr_lexpr arrow, larrowtt, ppr_lexpr arg]
 ppr_cmd (HsCmdArrApp _ arrow arg HsHigherOrderApp False)
   = hsep [ppr_lexpr arg, arrowtt, ppr_lexpr arrow]
+ppr_cmd (HsCmdMPApp _ arrow arg)
+  = hsep [ppr_lexpr arrow, larrowt, ppr_lexpr arg]
 
 ppr_cmd (HsCmdArrForm _ (L _ op) ps_fix rn_fix args)
   | HsVar _ (L _ v) <- op
