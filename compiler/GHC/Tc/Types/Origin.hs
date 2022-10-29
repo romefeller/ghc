@@ -710,6 +710,7 @@ exprCtOrigin (HsUntypedBracket {}) = Shouldn'tHappenOrigin "TH untyped bracket"
 exprCtOrigin (HsTypedSplice {})    = Shouldn'tHappenOrigin "TH typed splice"
 exprCtOrigin (HsUntypedSplice {})  = Shouldn'tHappenOrigin "TH untyped splice"
 exprCtOrigin (HsProc {})         = Shouldn'tHappenOrigin "proc"
+exprCtOrigin (HsMProc {})         = Shouldn'tHappenOrigin "mproc"
 exprCtOrigin (HsStatic {})       = Shouldn'tHappenOrigin "static expression"
 exprCtOrigin (XExpr (HsExpanded a _)) = exprCtOrigin a
 
