@@ -822,7 +822,11 @@ rnCmd (HsCmdArrApp _ arrow arg ho rtl)
         -- proc for the (-<) case.
         -- Local bindings, inside the enclosing proc, are not in scope
         -- inside 'arrow'.  In the higher-order case (-<<), they are.
-
+rnCmd (HsCmdMPApp _ arrow arg)
+  = do { (arrow',fvArrow) <- rnLExpr arrow
+       ; (arg',fvArg) <- rnLExpr arg
+       ; return (HsCmdMPApp noExtField arrow' arg',
+                 plusFV fvArrow fvArg) }
 -- infix form
 rnCmd (HsCmdArrForm _ op _ (Just _) [arg1, arg2])
   = do { (op',fv_op) <- escapeArrowScope (rnLExpr op)
@@ -900,6 +904,8 @@ methodNamesCmd (HsCmdArrApp _ _arrow _arg HsFirstOrderApp _rtl)
   = emptyFVs
 methodNamesCmd (HsCmdArrApp _ _arrow _arg HsHigherOrderApp _rtl)
   = unitFV appAName
+methodNamesCmd (HsCmdMPApp _ _arrow _arg)
+  = emptyFVs
 methodNamesCmd (HsCmdArrForm {}) = emptyFVs
 
 methodNamesCmd (HsCmdPar _ _ c _) = methodNamesLCmd c
