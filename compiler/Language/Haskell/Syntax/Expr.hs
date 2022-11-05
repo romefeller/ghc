@@ -823,6 +823,7 @@ data HsCmd id
         (XCmdArrApp id)
         (LHsExpr id)
         (LHsExpr id)
+
   | HsCmdArrForm         -- Command formation,  (| e cmd1 .. cmdn |)
         (XCmdArrForm id)
         (LHsExpr id)     -- The operator.

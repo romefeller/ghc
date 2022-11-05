@@ -953,6 +953,12 @@ zonkCmd env (HsCmdArrApp ty e1 e2 ho rl)
        new_ty <- zonkTcTypeToTypeX env ty
        return (HsCmdArrApp new_ty new_e1 new_e2 ho rl)
 
+zonkCmd env (HsCmdMPApp ty e1 e2)
+  = do new_e1 <- zonkLExpr env e1
+       new_e2 <- zonkLExpr env e2
+       new_ty <- zonkTcTypeToTypeX env ty
+       return (HsCmdMPApp new_ty new_e1 new_e2)
+
 zonkCmd env (HsCmdArrForm x op f fixity args)
   = do new_op <- zonkLExpr env op
        new_args <- mapM (zonkCmdTop env) args

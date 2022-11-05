@@ -134,6 +134,7 @@ hsExprType e@(HsTypedSplice{}) = pprPanic "hsExprType: Unexpected HsTypedSplice"
                                       -- than in the typechecked AST.
 hsExprType (HsUntypedSplice ext _) = dataConCantHappen ext
 hsExprType (HsProc _ _ lcmd_top) = lhsCmdTopType lcmd_top
+hsExprType (HsMProc _ _ lcmd_top) = lhsCmdTopType lcmd_top
 hsExprType (HsStatic (_, ty) _s) = ty
 hsExprType (HsPragE _ _ e) = lhsExprType e
 hsExprType (XExpr (WrapExpr (HsWrap wrap e))) = hsWrapperType wrap $ hsExprType e

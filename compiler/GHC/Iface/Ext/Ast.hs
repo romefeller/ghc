@@ -1201,6 +1201,10 @@ instance HiePass p => ToHie (LocatedA (HsExpr (GhcPass p))) where
         [ toHie $ PS Nothing (mkLScopeA cmdtop) NoScope pat
         , toHie cmdtop
         ]
+      HsMProc _ pats cmdtop ->
+        [ toHie $ PS Nothing (mkLScopeA cmdtop) NoScope (head pats)
+        , toHie cmdtop
+        ]
       HsStatic _ expr ->
         [ toHie expr
         ]
