@@ -296,6 +296,27 @@ dsProcExpr pat (L _ (HsCmdTop (CmdTopTc _unitTy cmd_ty ids) cmd)) = do
                     core_cmd
     return (mkLets meth_binds proc_code)
 
+
+dsMProcExpr
+        :: [LPat GhcTc]
+        -> LHsCmdTop GhcTc
+        -> DsM CoreExpr
+dsMProcExpr pat (L _ (HsCmdTop (CmdTopTc _unitTy cmd_ty ids) cmd)) = do
+    (meth_binds, meth_ids) <- mkCmdEnv ids
+    let locals = mkVarSet (collectPatBinders CollWithDictBinders pat)
+    (core_cmd, _free_vars, env_ids)
+       <- dsfixCmd meth_ids locals unitTy cmd_ty cmd
+    let env_ty = mkBigCoreVarTupTy env_ids
+    let env_stk_ty = mkCorePairTy env_ty unitTy
+    let env_stk_expr = mkCorePairExpr (mkBigCoreVarTup env_ids) mkCoreUnitExpr
+    fail_expr <- mkFailExpr (ArrowMatchCtxt ProcExpr) env_stk_ty
+    var <- selectSimpleMatchVarL Many pat
+    match_code <- matchSimply (Var var) (ArrowMatchCtxt ProcExpr) pat env_stk_expr fail_expr
+    let pat_ty = hsLPatType pat
+    let proc_code = do_premap meth_ids pat_ty env_stk_ty cmd_ty
+                    (Lam var match_code)
+                    core_cmd
+    return (mkLets meth_binds proc_code)
 {-
 Translation of a command judgement of the form
 

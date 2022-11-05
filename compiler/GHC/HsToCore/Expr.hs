@@ -521,7 +521,7 @@ dsExpr (HsUntypedSplice ext _) = dataConCantHappen ext
 
 -- Arrow notation extension
 dsExpr (HsProc _ pat cmd) = dsProcExpr pat cmd
-
+dsExpr (HsMProc _ pats cmd) = dsMProcExpr pats cmd
 
 -- HsSyn constructs that just shouldn't be here, because
 -- the renamer removed them.  See GHC.Rename.Expr.
